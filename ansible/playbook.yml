@@ -1,0 +1,39 @@
+- name: Setup Fluentd
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Setup Docker Fluentd image
+      docker_image:
+        name: fluent/fluentd:v1.16-1
+        tag: v1.16-1
+        source: pull
+
+    - name: Create Fluentd log directory
+      file:
+        path: /etc/fluentd
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Copy config file fluentd.conf
+      copy:
+        src: files/fluentd.conf
+        dest: /etc/fluentd/fluentd.conf
+        mode: '0644'
+
+    - name: Launch Fluentd container
+      docker_container:
+        name: fluentd
+        image: fluent/fluentd:v1.16-1
+        state: started
+        restart_policy: always
+        volumes:
+          - /var/lib/docker/containers:/fluentd/log/docker
+          - /var/log/test:/fluentd/log/output
+          - /etc/fluentd/fluentd.conf:/fluentd/etc/fluentd.conf
+        user: "root:root"
+        networks:
+          - name: ops_monitoring_monitoring
+        command: fluentd -c /fluentd/etc/fluentd.conf -v
+

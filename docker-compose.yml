@@ -1,0 +1,34 @@
+name: ops_monitoring
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+    restart: always
+    container_name: prometheus
+
+  grafana:
+    image: grafana/grafana-enterprise
+    ports:
+      - "80:3000"
+    environment:
+      - .env
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - monitoring
+    restart: always
+    container_name: grafana
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  grafana-storage:
+    driver: local
