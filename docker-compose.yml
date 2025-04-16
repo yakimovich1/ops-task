@@ -11,6 +11,11 @@ services:
       - monitoring
     restart: always
     container_name: prometheus
+    logging:
+      driver: json-file  # Стандартный драйвер (можно не указывать)
+      options:
+        labels: "container_name,container_id"
+        tag: "{{.Name}}/{{.ID}}"  # Добавляет имя контейнера и образ в тег
 
   grafana:
     image: grafana/grafana-enterprise
@@ -24,6 +29,12 @@ services:
       - monitoring
     restart: always
     container_name: grafana
+    logging:
+      driver: json-file  # Стандартный драйвер (можно не указывать)
+      options:
+        labels: "container_name,container_id"
+        tag: "{{.Name}}/{{.ID}}"  # Добавляет имя контейнера и образ в тег
+
 
 networks:
   monitoring:
