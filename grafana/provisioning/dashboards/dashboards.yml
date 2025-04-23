@@ -1,0 +1,12 @@
+# grafana/provisioning/dashboards/dashboards.yml
+apiVersion: 1
+
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: true  # Не удалять дашборды при обновлении
+    updateIntervalSeconds: 10
+    options:
+      path: /etc/grafana/provisioning/dashboards

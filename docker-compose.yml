@@ -12,28 +12,29 @@ services:
     restart: always
     container_name: prometheus
     logging:
-      driver: json-file  # Стандартный драйвер (можно не указывать)
+      driver: json-file
       options:
         labels: "container_name,container_id"
-        tag: "{{.Name}}/{{.ID}}"  # Добавляет имя контейнера и образ в тег
+        tag: "{{.Name}}/{{.ID}}"
 
   grafana:
     image: grafana/grafana-enterprise
     ports:
       - "80:3000"
-    environment:
-      - .env
     volumes:
       - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning  
     networks:
       - monitoring
     restart: always
     container_name: grafana
     logging:
-      driver: json-file  # Стандартный драйвер (можно не указывать)
+      driver: json-file
       options:
         labels: "container_name,container_id"
-        tag: "{{.Name}}/{{.ID}}"  # Добавляет имя контейнера и образ в тег
+        tag: "{{.Name}}/{{.ID}}"
 
 
 networks:
