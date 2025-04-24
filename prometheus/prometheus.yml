@@ -1,5 +1,5 @@
 scrape_configs:
   - job_name: 'log-collector'
     static_configs:
-      - targets: ['192.168.0.101:9090']
+      - targets: ['<IP-адрес_VM>:9090']
 
