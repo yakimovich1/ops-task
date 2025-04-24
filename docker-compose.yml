@@ -25,7 +25,7 @@ services:
       - grafana-storage:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
-      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning  
+      - .env  
     networks:
       - monitoring
     restart: always
